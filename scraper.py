@@ -1,15 +1,12 @@
-from bs4 import BeautifulSoup
-import requests
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import Select, WebDriverWait
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.support import expected_conditions as EC
-import time
 import pandas as pd
 
 def scrape_car_prices_to_csv(url, output_file):
-    service = Service("C:\\Program Files\\chrome-win64\\chromedriver.exe")
+    service = Service("C:\\Program Files\\chrome-win64\\chromedriver.exe") ## Cambia la ruta al chromedriver según tu instalación
     driver = webdriver.Chrome(service=service)
 
     data = []  # Lista para almacenar los datos
@@ -80,14 +77,14 @@ def scrape_car_prices_to_csv(url, output_file):
 
                 except Exception as e:
                     print(f"Error al procesar datos para {model_name} con {miles_value}: {e}")
+
+        # Guardar los datos en un archivo CSV
+        df = pd.DataFrame(data)
+        df.to_csv(output_file, index=False, encoding='utf-8')
+        print(f"Datos guardados en {output_file}")
+
     finally:
         driver.quit()
-
-    # Guardar los datos en un archivo CSV
-    df = pd.DataFrame(data)
-    df.to_csv(output_file, index=False, encoding='utf-8')
-    print(f"Datos guardados en {output_file}")
-
 
 if __name__ == "__main__":
     url = "https://www.toyota.com.ar/mi-toyota/servicios/plan-de-mantenimiento"
